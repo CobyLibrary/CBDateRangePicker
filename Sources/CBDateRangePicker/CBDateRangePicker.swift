@@ -1,11 +1,11 @@
 import SwiftUI
 
 public struct CBDateRangePickerView: View {
-    @Binding var selectedStartDate: Date
-    @Binding var selectedEndDate: Date
+    @Binding var startDate: Date
+    @Binding var endDate: Date
     
-    @State private var selectedStartDateComponents: DateComponents
-    @State private var selectedEndDateComponents: DateComponents
+    @State private var startDateComponents: DateComponents
+    @State private var endDateComponents: DateComponents
     @State private var selectedDateRange = Set<DateComponents>()
     @State private var selectedDateRangeTemp = Set<DateComponents>()
     
@@ -16,18 +16,18 @@ public struct CBDateRangePickerView: View {
         return ..<end
     }
     
-    init(
-        selectedStartDate: Binding<Date>,
-        selectedEndDate: Binding<Date>,
+    public init(
+        startDate: Binding<Date>,
+        endDate: Binding<Date>,
         toToday: Bool = false
     ) {
-        self._selectedStartDate = selectedStartDate
-        self._selectedEndDate = selectedEndDate
+        self._startDate = startDate
+        self._endDate = endDate
         self.toToday = toToday
-        self._selectedStartDateComponents = State(wrappedValue: calendar.dateComponents([.calendar, .era, .year, .month, .day], from: selectedStartDate.wrappedValue))
-        self._selectedEndDateComponents = State(wrappedValue: calendar.dateComponents([.calendar, .era, .year, .month, .day], from: selectedEndDate.wrappedValue))
-        self._selectedDateRange = State(wrappedValue: datesRange(from: selectedStartDate.wrappedValue, to: selectedEndDate.wrappedValue))
-        self._selectedDateRangeTemp = State(wrappedValue: datesRange(from: selectedStartDate.wrappedValue, to: selectedEndDate.wrappedValue))
+        self._startDateComponents = State(wrappedValue: calendar.dateComponents([.calendar, .era, .year, .month, .day], from: startDate.wrappedValue))
+        self._endDateComponents = State(wrappedValue: calendar.dateComponents([.calendar, .era, .year, .month, .day], from: endDate.wrappedValue))
+        self._selectedDateRange = State(wrappedValue: datesRange(from: startDate.wrappedValue, to: endDate.wrappedValue))
+        self._selectedDateRangeTemp = State(wrappedValue: datesRange(from: startDate.wrappedValue, to: endDate.wrappedValue))
     }
     
     public var body: some View {
@@ -36,14 +36,14 @@ public struct CBDateRangePickerView: View {
             .onChange(of: selectedDateRange) { _ in
                 switch selectedDateRange.count {
                 case 1:
-                    selectedStartDateComponents = selectedDateRange.first!
-                    selectedEndDateComponents = selectedStartDateComponents
+                    startDateComponents = selectedDateRange.first!
+                    endDateComponents = startDateComponents
                 case 2:
                     var tempDates = selectedDateRange
-                    tempDates.remove(selectedStartDateComponents)
-                    selectedEndDateComponents = tempDates.first!
-                    if selectedStartDateComponents > selectedEndDateComponents {
-                        selectedStartDateComponents = selectedEndDateComponents
+                    tempDates.remove(startDateComponents)
+                    endDateComponents = tempDates.first!
+                    if startDateComponents > endDateComponents {
+                        startDateComponents = endDateComponents
                     }
                 default:
                     let newData = selectedDateRangeTemp.symmetricDifference(selectedDateRange)
@@ -53,21 +53,21 @@ public struct CBDateRangePickerView: View {
                     }
                 }
             }
-            .onChange(of: selectedStartDate) { _ in
-                selectedStartDateComponents = calendar.dateComponents([.calendar, .era, .year, .month, .day], from: selectedStartDate)
-                selectedDateRange = datesRange(from: selectedStartDate, to: selectedEndDate)
+            .onChange(of: startDate) { _ in
+                startDateComponents = calendar.dateComponents([.calendar, .era, .year, .month, .day], from: startDate)
+                selectedDateRange = datesRange(from: startDate, to: endDate)
                 selectedDateRangeTemp = selectedDateRange
             }
-            .onChange(of: selectedEndDate) { _ in
-                selectedEndDateComponents = calendar.dateComponents([.calendar, .era, .year, .month, .day], from: selectedEndDate)
-                selectedDateRange = datesRange(from: selectedStartDate, to: selectedEndDate)
+            .onChange(of: endDate) { _ in
+                endDateComponents = calendar.dateComponents([.calendar, .era, .year, .month, .day], from: endDate)
+                selectedDateRange = datesRange(from: startDate, to: endDate)
                 selectedDateRangeTemp = selectedDateRange
             }
-            .onChange(of: selectedStartDateComponents) { _ in
-                selectedStartDate = calendar.date(from: selectedStartDateComponents)!
+            .onChange(of: startDateComponents) { _ in
+                startDate = calendar.date(from: startDateComponents)!
             }
-            .onChange(of: selectedEndDateComponents) { _ in
-                selectedEndDate = calendar.date(from: selectedEndDateComponents)!
+            .onChange(of: endDateComponents) { _ in
+                endDate = calendar.date(from: endDateComponents)!
             }
     }
     
