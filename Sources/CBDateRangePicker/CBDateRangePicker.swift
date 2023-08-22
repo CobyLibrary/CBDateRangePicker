@@ -32,7 +32,6 @@ public struct CBDateRangePickerView: View {
     
     public var body: some View {
         MultiDatePickerView()
-            .padding(.horizontal, 16)
             .labelsHidden()
             .onChange(of: selectedDateRange) { _ in
                 switch selectedDateRange.count {
