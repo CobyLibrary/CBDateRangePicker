@@ -79,10 +79,11 @@ struct CBDateRangePickerTestView: View {
 ```
 
 ## Show parameters
-
-- startDate: Binding<Date> **(Required)**
-- endDate: Binding<Date> **(Required)**
-- toToday: Bool
+```swift
+startDate: Binding<Date> // Required
+endDate: Binding<Date> // Required
+toToday: Bool
+```
 
 ## License
 
