@@ -3,13 +3,13 @@ import SwiftUI
 public struct CBDateRangePickerView: View {
     @Binding var selectedStartDate: Date
     @Binding var selectedEndDate: Date
-    @Binding var toToday: Bool
     
     @State private var selectedStartDateComponents: DateComponents
     @State private var selectedEndDateComponents: DateComponents
     @State private var selectedDateRange = Set<DateComponents>()
     @State private var selectedDateRangeTemp = Set<DateComponents>()
     
+    private var toToday: Bool
     private let calendar = Calendar.current
     private var bounds: PartialRangeUpTo<Date> {
         let end = Date()
@@ -19,11 +19,11 @@ public struct CBDateRangePickerView: View {
     init(
         selectedStartDate: Binding<Date>,
         selectedEndDate: Binding<Date>,
-        toToday: Binding<Bool>
+        toToday: Bool = false
     ) {
         self._selectedStartDate = selectedStartDate
         self._selectedEndDate = selectedEndDate
-        self._toToday = toToday
+        self.toToday = toToday
         self._selectedStartDateComponents = State(wrappedValue: calendar.dateComponents([.calendar, .era, .year, .month, .day], from: selectedStartDate.wrappedValue))
         self._selectedEndDateComponents = State(wrappedValue: calendar.dateComponents([.calendar, .era, .year, .month, .day], from: selectedEndDate.wrappedValue))
         self._selectedDateRange = State(wrappedValue: datesRange(from: selectedStartDate.wrappedValue, to: selectedEndDate.wrappedValue))
