@@ -34,40 +34,47 @@ public struct CBDateRangePickerView: View {
         MultiDatePickerView()
             .labelsHidden()
             .onChange(of: selectedDateRange) { _ in
+                let newDate = selectedDateRange.symmetricDifference(selectedDateRangeTemp)
+                
                 switch selectedDateRange.count {
+                case 0:
+                    selectedDateRange = selectedDateRangeTemp
                 case 1:
-                    startDateComponents = selectedDateRange.first!
-                    endDateComponents = startDateComponents
+                    if selectedDateRangeTemp.count == 2  && selectedDateRangeTemp.contains(newDate) {
+                        startDate = calendar.date(from: newDate.first!)!
+                        endDate = calendar.date(from: newDate.first!)!
+                        selectedDateRange = datesRange(from: startDate, to: endDate)
+                        selectedDateRangeTemp = selectedDateRange
+                    } else {
+                        startDate = calendar.date(from: selectedDateRange.first!)!
+                        endDate = calendar.date(from: selectedDateRange.first!)!
+                    }
                 case 2:
-                    var tempDates = selectedDateRange
-                    tempDates.remove(startDateComponents)
-                    endDateComponents = tempDates.first!
-                    if startDateComponents > endDateComponents {
-                        startDateComponents = endDateComponents
+                    if selectedDateRangeTemp.count == 3 && selectedDateRangeTemp.contains(newDate) {
+                        startDate = calendar.date(from: newDate.first!)!
+                        endDate = calendar.date(from: newDate.first!)!
+                        selectedDateRange = datesRange(from: startDate, to: endDate)
+                        selectedDateRangeTemp = selectedDateRange
+                    } else {
+                        if startDateComponents > newDate.first! {
+                            startDate = calendar.date(from: newDate.first!)!
+                        }
+                        endDate = calendar.date(from: newDate.first!)!
                     }
                 default:
-                    let newData = selectedDateRangeTemp.symmetricDifference(selectedDateRange)
-                    
-                    if !newData.isEmpty {
-                        selectedDateRange = newData
+                    if !newDate.isEmpty {
+                        startDate = calendar.date(from: newDate.first!)!
+                        endDate = calendar.date(from: newDate.first!)!
                     }
                 }
             }
             .onChange(of: startDate) { _ in
                 startDateComponents = calendar.dateComponents([.calendar, .era, .year, .month, .day], from: startDate)
-                selectedDateRange = datesRange(from: startDate, to: endDate)
-                selectedDateRangeTemp = selectedDateRange
             }
             .onChange(of: endDate) { _ in
                 endDateComponents = calendar.dateComponents([.calendar, .era, .year, .month, .day], from: endDate)
                 selectedDateRange = datesRange(from: startDate, to: endDate)
                 selectedDateRangeTemp = selectedDateRange
-            }
-            .onChange(of: startDateComponents) { _ in
-                startDate = calendar.date(from: startDateComponents)!
-            }
-            .onChange(of: endDateComponents) { _ in
-                endDate = calendar.date(from: endDateComponents)!
             }
     }
     
