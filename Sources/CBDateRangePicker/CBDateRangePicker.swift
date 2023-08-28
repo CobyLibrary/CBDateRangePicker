@@ -43,8 +43,6 @@ public struct CBDateRangePickerView: View {
                     if selectedDateRangeTemp.count == 2  && selectedDateRangeTemp.contains(newDate) {
                         startDate = calendar.date(from: newDate.first!)!
                         endDate = calendar.date(from: newDate.first!)!
-                        selectedDateRange = datesRange(from: startDate, to: endDate)
-                        selectedDateRangeTemp = selectedDateRange
                     } else {
                         startDate = calendar.date(from: selectedDateRange.first!)!
                         endDate = calendar.date(from: selectedDateRange.first!)!
@@ -53,8 +51,6 @@ public struct CBDateRangePickerView: View {
                     if selectedDateRangeTemp.count == 3 && selectedDateRangeTemp.contains(newDate) {
                         startDate = calendar.date(from: newDate.first!)!
                         endDate = calendar.date(from: newDate.first!)!
-                        selectedDateRange = datesRange(from: startDate, to: endDate)
-                        selectedDateRangeTemp = selectedDateRange
                     } else {
                         if startDateComponents > newDate.first! {
                             startDate = calendar.date(from: newDate.first!)!
@@ -67,6 +63,9 @@ public struct CBDateRangePickerView: View {
                         endDate = calendar.date(from: newDate.first!)!
                     }
                 }
+                
+                selectedDateRange = datesRange(from: startDate, to: endDate)
+                selectedDateRangeTemp = selectedDateRange
             }
             .onChange(of: startDate) { _ in
                 startDateComponents = calendar.dateComponents([.calendar, .era, .year, .month, .day], from: startDate)
