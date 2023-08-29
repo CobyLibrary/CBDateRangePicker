@@ -69,6 +69,8 @@ public struct CBDateRangePickerView: View {
             }
             .onChange(of: startDate) { _ in
                 startDateComponents = calendar.dateComponents([.calendar, .era, .year, .month, .day], from: startDate)
+                selectedDateRange = datesRange(from: startDate, to: endDate)
+                selectedDateRangeTemp = selectedDateRange
             }
             .onChange(of: endDate) { _ in
                 endDateComponents = calendar.dateComponents([.calendar, .era, .year, .month, .day], from: endDate)
