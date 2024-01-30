@@ -25,66 +25,6 @@ File -> Swift Packages -> Add Package Dependency
 https://github.com/CobyLibrary/CBDateRangePicker.git
 ```
 
-## Usage
-
-### Quick Start
-
-```swift
-import CBDateRangePicker
-
-struct CBDateRangePickerTestView: View {
-    @State private var startDate: Date = Date()
-    @State private var endDate: Date = Date()
-    
-    var body: some View {
-        VStack {
-            CBDateRangePickerView(
-                startDate: $startDate,
-                endDate: $endDate
-            )
-            .background(Color.white)
-            .padding()
-            .frame(height: 200)
-            
-            ...
-        }
-    }
-}
-```
-
-### Limit DateRange Until Today
-
-```swift
-import CBDateRangePicker
-
-struct CBDateRangePickerTestView: View {
-    @State private var startDate: Date = Date()
-    @State private var endDate: Date = Date()
-    
-    var body: some View {
-        VStack {
-            CBDateRangePickerView(
-                startDate: $startDate,
-                endDate: $endDate,
-                toToday: true
-            )
-            .background(Color.white)
-            .padding()
-            .frame(height: 200)
-            
-            ...
-        }
-    }
-}
-```
-
-## Show parameters
-```swift
-startDate: Binding<Date> // Required
-endDate: Binding<Date> // Required
-toToday: Bool
-```
-
 ## License
 
 This code is distributed under the terms and conditions of the [MIT license](LICENSE).
